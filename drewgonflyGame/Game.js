@@ -13,6 +13,7 @@ class Game {
         this.dragonImg.src = './images/Dragon.gif';
         this.p1;
         this.dragons = [];
+        this.gameOver = false;
     }
 
     initialize() {
@@ -27,7 +28,7 @@ class Game {
             if(this.board.tiles[avatarSeed].terrain == 'grass') break;
         }
         //initializing player 1 with their avatar (and starting point on the map)
-        this.p1 = new Avatar(this.avImg,this.board.tiles[avatarSeed], 40, this.board.tiles);
+        this.p1 = new Avatar(this.avImg,this.board.tiles[avatarSeed], 30, this.board.tiles);
 
         //creating 2 - 5 dragons and placing them on thier starting points (mountains).
         const numDragons = Math.floor(Math.random()*4 + 2);
@@ -37,19 +38,31 @@ class Game {
                 dragonSeed = Math.floor(Math.random()*this.board.tiles.length);
                 if(this.board.tiles[dragonSeed].terrain == 'mountain') break;
             }
-            this.dragons.push(new Dragon(this.dragonImg, this.board.tiles[dragonSeed], 40, 0,0, this.board.tiles))
+            this.dragons.push(new Dragon(this.dragonImg, this.board.tiles[dragonSeed], 40, .1,.1, this.board.tiles))
         }
+
     }
 
     play() {
         this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.board.drawTiles(this.ctx);
-        this.p1.draw(this.ctx);
-        this.dragons.forEach((dragon) => {
-            dragon.draw(this.ctx);
-            //dragon.move(this.canvas.width, this.canvas.height);
-        })
+        if(!this.gameOver) {
+            this.p1.draw(this.ctx);
+        }
 
+        if(this.p1.startedGame && !this.gameOver){
+            this.dragons.forEach((dragon) => {
+                dragon.draw(this.ctx);
+                dragon.move(this.canvas.width, this.canvas.height);
+                if(dragon.intersects(this.p1)) this.gameOver = true;
+            })
+        }
+
+        if(this.gameOver) {
+            this.ctx.font = "64px Arial";
+            this.ctx.fillStyle = "black";
+            this.ctx.fillText("GAME OVER!!",this.canvas.height/2 - 84,this.canvas.width/2 - 64);
+        }
 
         window.requestAnimationFrame(this.play.bind(this));
     }

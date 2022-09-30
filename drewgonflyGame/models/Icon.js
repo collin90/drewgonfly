@@ -13,4 +13,25 @@ class Icon {
         ctx.closePath();
     }
 
+        //function to check if the current piece is intersecting a piece (passed as a parameter)
+        intersects(other) {
+
+            let txmin = this.x;
+            let txmax = this.x + this.size;
+            let tymin = this.y;
+            let tymax = this.y + this.size;
+
+            let oxmin = other.x;
+            let oxmax = other.x + other.size;
+            let oymin = other.y;
+            let oymax = other.y + other.size;
+
+            let tLeftOfO = txmax < oxmin;
+            let tRightOfO = txmin > oxmax;
+            let tAboveO = tymin > oymax;
+            let tBelowO = tymax < oymin;
+        
+            return !( tLeftOfO || tRightOfO || tAboveO || tBelowO );
+        }
+
 } export default Icon;

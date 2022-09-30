@@ -19,12 +19,12 @@ class Dragon extends Icon {
 
         this.x += this.dx;
         this.y += this.dy;
-        let speedUp = Math.floor(Math.random()*5);
-        if(speedUp == 1){
+        let speedUp = Math.floor(Math.random()*50);
+        if(speedUp == 0){
             this.dx += .2;
             this.dy += .2;
         }
-        else if(speedUp == 4){
+        else if(speedUp == 1){
             this.dx -= .2;
             this.dy -= .2;
         }
